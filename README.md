@@ -1,16 +1,16 @@
 # Recon Tool
 
-A Python CLI tool with Streamlit interface for reconnaissance and contact information extraction from professional sites, mimicking SignalHire functionality.
+A Python Streamlit web application for reconnaissance and contact information extraction from professional sites, mimicking SignalHire functionality.
 
 ## Features
 
-- **CLI Interface**: Command-line tool for quick reconnaissance
-- **Streamlit Web UI**: Interactive web interface for easy use
+- **Streamlit Web UI**: Interactive web interface for easy reconnaissance
 - **Multi-Site Support**: LinkedIn and other professional platforms
 - **Contact Extraction**: Emails and phone numbers with validation
 - **OSINT Integration**: theHarvester for comprehensive email harvesting
 - **Data Export**: JSON and CSV export capabilities
 - **Verification**: Email and phone number validation
+- **Progress Tracking**: Real-time scraping progress with visual indicators
 
 ## Installation
 
@@ -33,42 +33,29 @@ python setup.py install
 
 ## Usage
 
-### CLI Mode
+### Launch the Application
 
 ```bash
-# Scrape a LinkedIn profile
-python main.py --url "https://www.linkedin.com/in/username"
+# Launch via main.py launcher
+python main.py
 
-# Launch Streamlit web interface
-python main.py --streamlit
-
-# Search by name (limited functionality)
-python main.py --name "John Doe"
-
-# Specify output file
-python main.py --url "https://www.linkedin.com/in/username" --output "results.json"
-```
-
-### Web Interface
-
-1. Launch the web interface:
-```bash
-python main.py --streamlit
-# or directly
+# Or run Streamlit directly
 streamlit run app.py
 ```
 
 2. Open your browser to the displayed URL (usually http://localhost:8501)
 
-3. Enter a profile URL or person name
+3. Enter a profile URL or person name in the web interface
 
-4. Click "Start Reconnaissance"
+4. Click "🔍 Start Reconnaissance"
+
+5. View extracted contacts with validation status
 
 ## Project Structure
 
 ```
 recon_tool/
-├── main.py                 # CLI entry point
+├── main.py                 # Streamlit launcher
 ├── app.py                  # Streamlit web application
 ├── requirements.txt        # Python dependencies
 ├── scrapers/
@@ -148,7 +135,7 @@ Results are saved as JSON with the following structure:
 
 1. Create a new scraper in `scrapers/` directory
 2. Implement a scrape function that returns structured data
-3. Update `main.py` and `app.py` to use the new scraper
+3. Update `app.py` to use the new scraper
 4. Add any required dependencies to `requirements.txt`
 
 ### Extending Contact Extraction
