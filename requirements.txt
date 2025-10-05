@@ -1,8 +1,6 @@
 streamlit
 requests
 beautifulsoup4
-selenium
-webdriver-manager
 linkedin-scraper
 theHarvester
 email-validator

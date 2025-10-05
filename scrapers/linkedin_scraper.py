@@ -1,24 +1,17 @@
 #!/usr/bin/env python3
 """
 LinkedIn Scraper Module
-Uses linkedin_scraper library for extracting profile data
+Uses requests and BeautifulSoup for static scraping (Streamlit Cloud compatible)
 """
 
 import re
 import time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from webdriver_manager.chrome import ChromeDriverManager
+import requests
 from bs4 import BeautifulSoup
 
 def scrape_linkedin_profile(url):
     """
-    Scrape LinkedIn profile for contact information
+    Scrape LinkedIn profile for contact information using requests (Streamlit Cloud compatible)
 
     Args:
         url (str): LinkedIn profile URL
@@ -28,44 +21,29 @@ def scrape_linkedin_profile(url):
     """
     print(f"Scraping LinkedIn profile: {url}")
 
-    # Set up Chrome options for headless browsing
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    # Headers to mimic a real browser
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+    }
 
     try:
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-
-        driver.get(url)
-        time.sleep(3)  # Wait for page to load
-
-        # Try to handle login wall
-        try:
-            # Check if login is required
-            login_button = driver.find_element(By.XPATH, "//a[contains(@href, 'login')]")
-            print("LinkedIn requires login. This scraper works best with logged-in sessions.")
-            print("For better results, consider using linkedin_scraper library with credentials.")
-        except NoSuchElementException:
-            pass
-
-        # Wait for profile content to load
-        try:
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "pv-top-card"))
-            )
-        except TimeoutException:
-            print("Profile content may not have loaded properly")
-
-        # Get page source
-        page_source = driver.page_source
+        # Make the request
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
 
         # Parse with BeautifulSoup
-        soup = BeautifulSoup(page_source, 'html.parser')
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Check if we got a login page
+        if 'login' in response.url or soup.find('form', {'action': re.compile(r'login')}):
+            print("LinkedIn returned a login page. Static scraping has limitations.")
+            print("For better results, consider using the linkedin-scraper library or manual data entry.")
 
         # Extract basic profile info
         profile_data = {
@@ -77,12 +55,14 @@ def scrape_linkedin_profile(url):
             'about': extract_about(soup),
             'experience': extract_experience(soup),
             'education': extract_education(soup),
-            'raw_html': page_source[:5000]  # First 5000 chars for debugging
+            'raw_html': str(soup)[:5000]  # First 5000 chars for debugging
         }
 
-        driver.quit()
         return profile_data
 
+    except requests.RequestException as e:
+        print(f"Request error for LinkedIn: {e}")
+        return {'error': f'Request failed: {str(e)}', 'url': url}
     except Exception as e:
         print(f"Error scraping LinkedIn: {e}")
         return {'error': str(e), 'url': url}

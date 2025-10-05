@@ -1,10 +1,11 @@
 # Recon Tool
 
-A Python Streamlit web application for reconnaissance and contact information extraction from professional sites, mimicking SignalHire functionality.
+A Python Streamlit web application for reconnaissance and contact information extraction from professional sites, mimicking SignalHire functionality. **Streamlit Cloud compatible** - deployable online without local browser dependencies.
 
 ## Features
 
 - **Streamlit Web UI**: Interactive web interface for easy reconnaissance
+- **Cloud Compatible**: Works on Streamlit Cloud and other hosting platforms
 - **Multi-Site Support**: LinkedIn and other professional platforms
 - **Contact Extraction**: Emails and phone numbers with validation
 - **OSINT Integration**: theHarvester for comprehensive email harvesting
@@ -33,7 +34,7 @@ python setup.py install
 
 ## Usage
 
-### Launch the Application
+### Local Development
 
 ```bash
 # Launch via main.py launcher
@@ -50,6 +51,17 @@ streamlit run app.py
 4. Click "🔍 Start Reconnaissance"
 
 5. View extracted contacts with validation status
+
+### Streamlit Cloud Deployment
+
+1. Push your code to GitHub
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Connect your GitHub repository
+4. Set the main file path to `app.py`
+5. The `packages.txt` file is included for any required system packages
+6. Deploy!
+
+**Note**: The tool uses requests-based scraping (no Selenium) for full Streamlit Cloud compatibility.
 
 ## Project Structure
 
@@ -71,8 +83,7 @@ recon_tool/
 ## Dependencies
 
 - **streamlit**: Web interface framework
-- **requests/beautifulsoup4**: HTTP requests and HTML parsing
-- **selenium/webdriver-manager**: Browser automation
+- **requests/beautifulsoup4**: HTTP requests and HTML parsing (cloud-compatible)
 - **linkedin-scraper**: LinkedIn-specific scraping
 - **theHarvester**: Email/subdomain reconnaissance
 - **email-validator**: Email validation
@@ -114,9 +125,14 @@ Results are saved as JSON with the following structure:
 
 ## Troubleshooting
 
+### Streamlit Cloud Issues
+- The tool uses requests-based scraping (no browser automation) for full cloud compatibility
+- LinkedIn may return limited data without authentication
+- For better results, consider using the linkedin-scraper library locally
+
 ### LinkedIn Scraping Issues
 - LinkedIn requires authentication for full profiles
-- Use undetected-chromedriver for better success rates
+- Static scraping may return login pages or limited content
 - Consider manual data entry for critical reconnaissance
 
 ### theHarvester Not Found
