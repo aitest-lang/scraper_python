@@ -12,6 +12,7 @@ from datetime import datetime
 from scrapers.linkedin_scraper import scrape_linkedin_profile
 from utils.extractors import extract_contacts
 from utils.storage import save_to_json, load_from_json
+from utils.theharvester_integration import run_theharvester, extract_domain_from_url, combine_results
 
 def main():
     st.set_page_config(
@@ -60,15 +61,29 @@ def main():
                     if url:
                         status_text.text(f"Scraping {url}...")
                         raw_data = scrape_linkedin_profile(url)
+
+                        # Run theHarvester for additional OSINT
+                        progress_bar.progress(30)
+                        status_text.text("Running OSINT reconnaissance...")
+
+                        domain = extract_domain_from_url(url)
+                        if domain:
+                            harvester_results = run_theharvester(domain)
+                            if 'error' not in harvester_results:
+                                # Combine results
+                                contacts_temp = extract_contacts(raw_data)
+                                contacts = combine_results(contacts_temp, harvester_results)
+                            else:
+                                contacts = extract_contacts(raw_data)
+                        else:
+                            contacts = extract_contacts(raw_data)
                     else:
                         status_text.text(f"Searching for {name}...")
                         st.warning("Name search not implemented yet")
                         return
 
-                    progress_bar.progress(50)
+                    progress_bar.progress(70)
                     status_text.text("Extracting contacts...")
-
-                    contacts = extract_contacts(raw_data)
 
                     progress_bar.progress(80)
                     status_text.text("Saving results...")
