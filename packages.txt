@@ -1,7 +1,6 @@
-# System packages for Streamlit Cloud deployment
-# These may be needed for some of the Python packages
 libxml2-dev
 libxslt-dev
 libffi-dev
 libssl-dev
 build-essential
+
