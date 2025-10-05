@@ -179,7 +179,7 @@ def validate_emails(emails: List[str]) -> List[str]:
 
     except ImportError:
         # Fallback if library not available
-        print("python-email-validator not available, using basic validation")
+        print("email-validator not available, using basic validation")
         validated = [email for email in emails if basic_email_check(email)]
 
     return validated

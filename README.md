@@ -1,1 +1,170 @@
-# scraper_python
+# Recon Tool
+
+A Python CLI tool with Streamlit interface for reconnaissance and contact information extraction from professional sites, mimicking SignalHire functionality.
+
+## Features
+
+- **CLI Interface**: Command-line tool for quick reconnaissance
+- **Streamlit Web UI**: Interactive web interface for easy use
+- **Multi-Site Support**: LinkedIn and other professional platforms
+- **Contact Extraction**: Emails and phone numbers with validation
+- **OSINT Integration**: theHarvester for comprehensive email harvesting
+- **Data Export**: JSON and CSV export capabilities
+- **Verification**: Email and phone number validation
+
+## Installation
+
+1. Clone or download the project
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Install theHarvester (optional, for enhanced OSINT):
+```bash
+# Install from GitHub or package manager
+pip install theHarvester
+# or
+git clone https://github.com/laramies/theHarvester
+cd theHarvester
+pip install -r requirements.txt
+python setup.py install
+```
+
+## Usage
+
+### CLI Mode
+
+```bash
+# Scrape a LinkedIn profile
+python main.py --url "https://www.linkedin.com/in/username"
+
+# Launch Streamlit web interface
+python main.py --streamlit
+
+# Search by name (limited functionality)
+python main.py --name "John Doe"
+
+# Specify output file
+python main.py --url "https://www.linkedin.com/in/username" --output "results.json"
+```
+
+### Web Interface
+
+1. Launch the web interface:
+```bash
+python main.py --streamlit
+# or directly
+streamlit run app.py
+```
+
+2. Open your browser to the displayed URL (usually http://localhost:8501)
+
+3. Enter a profile URL or person name
+
+4. Click "Start Reconnaissance"
+
+## Project Structure
+
+```
+recon_tool/
+├── main.py                 # CLI entry point
+├── app.py                  # Streamlit web application
+├── requirements.txt        # Python dependencies
+├── scrapers/
+│   ├── linkedin_scraper.py # LinkedIn-specific scraper
+│   └── general_scraper.py  # General website scraper
+├── utils/
+│   ├── extractors.py       # Contact extraction and validation
+│   ├── storage.py          # JSON/CSV storage utilities
+│   └── theharvester_integration.py # OSINT tool integration
+└── data/                   # Output directory for results
+```
+
+## Dependencies
+
+- **streamlit**: Web interface framework
+- **requests/beautifulsoup4**: HTTP requests and HTML parsing
+- **selenium/webdriver-manager**: Browser automation
+- **linkedin-scraper**: LinkedIn-specific scraping
+- **theHarvester**: Email/subdomain reconnaissance
+- **email-validator**: Email validation
+- **phonenumbers**: Phone number validation and formatting
+- **scrapy**: Advanced web scraping framework
+- **undetected-chromedriver**: Anti-detection browser automation
+- **shodan**: IP/domain reconnaissance
+
+## Output Format
+
+Results are saved as JSON with the following structure:
+
+```json
+{
+  "emails": ["user@example.com", "contact@company.com"],
+  "phones": ["+1 123-456-7890", "+44 20 7123 4567"],
+  "metadata": {
+    "source_url": "https://www.linkedin.com/in/username",
+    "name": "John Doe",
+    "title": "Software Engineer",
+    "company": "Tech Corp",
+    "location": "San Francisco, CA",
+    "extraction_timestamp": "2025-10-05T21:30:00",
+    "total_emails_found": 2,
+    "total_phones_found": 1,
+    "validated_emails": 2,
+    "validated_phones": 1
+  }
+}
+```
+
+## Legal and Ethical Considerations
+
+- This tool is for educational and research purposes only
+- Respect website terms of service and robots.txt
+- LinkedIn and other sites have strict scraping policies
+- Use responsibly and obtain permission when necessary
+- Rate limiting and delays are implemented to minimize impact
+
+## Troubleshooting
+
+### LinkedIn Scraping Issues
+- LinkedIn requires authentication for full profiles
+- Use undetected-chromedriver for better success rates
+- Consider manual data entry for critical reconnaissance
+
+### theHarvester Not Found
+- Ensure theHarvester is installed and in PATH
+- Check Python path if installed via pip
+- Some systems may require sudo for installation
+
+### Import Errors
+- Install all dependencies: `pip install -r requirements.txt`
+- Some packages may require specific Python versions
+- Check for conflicting package versions
+
+## Development
+
+### Adding New Scrapers
+
+1. Create a new scraper in `scrapers/` directory
+2. Implement a scrape function that returns structured data
+3. Update `main.py` and `app.py` to use the new scraper
+4. Add any required dependencies to `requirements.txt`
+
+### Extending Contact Extraction
+
+1. Add new regex patterns in `utils/extractors.py`
+2. Implement validation functions for new contact types
+3. Update the extraction pipeline in `extract_contacts()`
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is for educational purposes. Use at your own risk and responsibility.
