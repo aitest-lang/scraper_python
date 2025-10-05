@@ -1,0 +1,13 @@
+streamlit
+requests
+beautifulsoup4
+selenium
+webdriver-manager
+linkedin-scraper
+theHarvester
+python-email-validator
+phonenumbers
+scrapy
+undetected-chromedriver
+streamlit-aggrid
+shodan
